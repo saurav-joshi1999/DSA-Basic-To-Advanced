@@ -1,0 +1,62 @@
+public static class LargestRectangle
+{
+    public static void mainn()
+    {
+        int[] arr = { 2, 1, 5, 6, 2, 3, 1 };
+        System.Console.WriteLine("Max Rec Area : "+ GetlargestRectangelArea(arr));
+    }
+
+    public static int GetlargestRectangelArea(int[] arr)
+    {
+        int n = arr.Length;
+        int[] leftS = Enumerable.Repeat(0, n); ;
+        int[] rightS = Enumerable.Repeat(n, n);
+        Stack<int> indexSt = new Stack<int>();
+
+        for (int i = 0; i < n; i++)
+        {
+            while (indexSt.Count != 0)
+            {
+                if (arr[indexSt.Peek] > arr[i])
+                {
+                    indexSt.Pop();
+                    //continue;
+                }
+                else
+                {
+                    leftS[i] = indexSt.Peek + 1;
+                }
+            }
+
+            indexSt.Push(i);
+        }
+
+        Stack<int> indexSt = new Stack<int>();
+        for (int i = n - 1; i >= 0; i--)
+        {
+            while (indexSt.Count != 0)
+            {
+                if (arr[indexSt.Peek] > arr[i])
+                {
+                    indexSt.Pop();
+                    //continue;
+                }
+                else
+                {
+                    rightSS[i] = indexSt.Peek - 1;
+                }
+            }
+
+            indexSt.Push(i);
+        }
+
+        int maxSum = int.MinValue;
+        for (int i = 0; i < n; i++)
+        {
+            int sum = (rightS[i] - leftS[i] + 1) * arr[i];
+            maxSum = Math.Max(sum, maxSum);
+        }
+
+        return maxSum;
+    }
+}
