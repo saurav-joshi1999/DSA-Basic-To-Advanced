@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.ConstrainedExecution;
+using System.Runtime.InteropServices;
 
 internal class Program
 {
@@ -241,5 +242,12 @@ internal class Program
         // Design Control Class
         //MethodClass.mainn();
         //client.mainn();
+
+        // GRAPH 
+        //AdjacentListGraph.mainn();
+        //BinaryTreeClass.PrintPreOrderQueue(BSTRoot);
+        //System.Console.WriteLine();
+        BTree invertRoot = AdjacentListGraph.ReverseBT(BSTRoot);
+        //BinaryTreeClass.PrintPreOrderQueue(invertRoot);
     }
 }

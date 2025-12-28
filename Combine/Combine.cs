@@ -10,9 +10,10 @@ public static class CombineQuestion
 {
     public static void mainn()
     {
-        //int miniBookLen = AllocatingBookWithMinPageDiff(new int[]{12,12,12,12}, 3);
-        int miniBookLen = MinLargestDistancePlacingCow([1, 2, 4, 8, 9], 3);
-        System.Console.WriteLine("Mini Book len : " + miniBookLen);
+        // //int miniBookLen = AllocatingBookWithMinPageDiff(new int[]{12,12,12,12}, 3);
+        // int miniBookLen = MinLargestDistancePlacingCow([1, 2, 4, 8, 9], 3);
+        // System.Console.WriteLine("Mini Book len : " + miniBookLen);
+        MaxContinuousSumSubArray(new int[] {2,-2,5,-5-7,8,9,-10});
     }
     public static void Pairs(int[] arr, int i, List<string> lt)
     {
@@ -1598,5 +1599,18 @@ public static class CombineQuestion
         //}
 
         return false;
+    }
+
+    public static int MaxContinuousSumSubArray(int[] arr)
+    {
+        int curr = 0; int maxi = int.MinValue;
+        foreach(int num in arr)
+        {
+            curr = Math.Max(num, curr + num);
+            maxi = Math.Max(maxi, curr);
+        }
+
+        System.Console.WriteLine("Max Sum Array :"+ maxi);
+        return maxi;
     }
 }

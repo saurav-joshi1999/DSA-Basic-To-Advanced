@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Drawing;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -82,9 +84,10 @@ public static class AdjacentListGraph
         };
         //DijkstraAlgorithem(keyValuesGraph1);
 
-        int[,] maze = { {1,1,1,1}, {1,1,0,1}, {1,1,1,1}, {1,1,0,0}, {1,0,0,0}};
-        int dist = ShortestDistance(maze, 0,1, 2,2, new bool[5,4]);
-        System.Console.WriteLine("Mini Dist : "+ dist);
+        //int[,] maze = { {1,1,1,1}, {1,1,0,1}, {1,1,1,1}, {1,1,0,0}, {1,0,0,0}};
+        //int dist = ShortestDistance(maze, 0,1, 2,2, new bool[5,4]);
+        //System.Console.WriteLine("Mini Dist : "+ dist);
+        GetDijkstraGraph();
     }
 
     public static List<int> BFSotLevelOrderTraversal(List<List<int>> graph)
@@ -563,5 +566,74 @@ public static class AdjacentListGraph
         isvisited[i,j] = false;
 
         return Math.Min(Math.Min(down, up), Math.Min(left, right));
+    }
+
+    public static void GetDijkstraGraph()
+    {
+        List<List<int>> llt = new List<List<int>>
+        {
+            new List<int> {0,1,100},  new List<int> {1,2,100}, new List<int> {2,0,100}, 
+            new List<int> {1,3,600}, new List<int>{2,3,200}
+        };
+
+        List<List<Tuple<int, int>>> graph= new List<List<Tuple<int, int>>>();
+        for (int i = 0; i < 4; i++) 
+{           graph.Add(new List<Tuple<int, int>>());
+}
+        foreach(List<int> lt in llt)
+        {
+            graph[lt[0]].Add(Tuple.Create(lt[1], lt[2]));
+        }
+
+        int shortestDist = DijkstraAlgorithemShortestPathWithMinStops(graph, 0, 3, 2);
+        System.Console.WriteLine("Shrotest Dist : "+ shortestDist);
+    }
+    public static int DijkstraAlgorithemShortestPathWithMinStops(List<List<Tuple<int, int>>> graph, int source, int desti, int stop)
+    {
+        int[] dist = Enumerable.Repeat(int.MaxValue, graph.Count).ToArray();
+        List<Tuple<int, Tuple<int, int>>> queue = new List<Tuple<int, Tuple<int, int>>>();
+        queue.Add(Tuple.Create(0, Tuple.Create(0,0)));
+        dist[0] = 0;
+
+        while(queue.Count != 0)
+        {
+            // no. of stop, distance, node
+            Tuple<int, Tuple<int, int>> queueVal = queue.First();
+            queue.Remove(queueVal);
+
+            if (queueVal.Item2.Item2 == desti)
+                continue; // already reach the destination no need to check all the neighbour path 
+                // and its value already present in dist array
+
+            if (stop < queueVal.Item1) // can never reach as max stop has alredy reached
+                continue;
+
+            foreach(Tuple<int, int> neighWithDist in graph[queueVal.Item2.Item2])
+            {
+                int distVal = queueVal.Item2.Item1 + neighWithDist.Item2;
+                if (distVal < dist[neighWithDist.Item1] && queueVal.Item1 <= stop)
+                {
+                    dist[neighWithDist.Item1] = distVal;
+                    queue.Add(Tuple.Create(queueVal.Item1+1, Tuple.Create(distVal, neighWithDist.Item1)));
+                }   
+            }
+        }
+
+        return dist[desti];
+    }
+
+    public static BTree ReverseBT(BTree root)
+    {
+        if (root ==null)
+            return null;
+
+        BTree leftNode = ReverseBT(root.left);
+        BTree rightNode = ReverseBT(root.right);
+
+        BTree temp = leftNode;
+        root.left = rightNode;
+        root.right = temp;
+
+        return root;
     }
 }
